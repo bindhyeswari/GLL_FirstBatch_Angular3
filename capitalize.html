@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        var str = 'asd f f  asdf  f asdf as df asdf'.replace(/\b[a-z]/g, function(x) {return x.toUpperCase()});
+        str[0] = 'M';
+        //http://stackoverflow.com/questions/51185/are-javascript-strings-immutable-do-i-need-a-string-builder-in-javascript
+        console.log(p);
+
+
+        /*
+        First approach
+
+        console.log(
+                str.split(' ').map(function (word){
+                    return word.charAt(0).toUpperCase() + word.slice(1, word.length);
+                }).join(' ')
+        );*/
+        console.log(str.replace(/\b[a-z]/g, function (x){
+            return x.toUpperCase();
+        }));
+    </script>
+</head>
+<body>
+
+</body>
+</html>

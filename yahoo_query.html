@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script>
+        $(function (){
+            $.getJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.' +
+                            'finance.quotes%20where%20symbol%20in%20(%27GOOG%27)&format=' +
+                            'json&diagnostics=true&env=http://datatables.org/alltables.env',
+                function (data){
+                    console.log(data);
+                });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

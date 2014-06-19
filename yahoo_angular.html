@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html ng-app="yahooApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            padding: 3em;
+            font: 300 1em 'Helvetica Neue';
+        }
+        div.company {
+            background-color: #efefef;
+            display: inline-block;
+            cursor: pointer;
+            padding: 0.35em 0.5em;
+            margin: 0.15em;
+        }
+        div.company:hover {
+            background-color: #555;
+            color: white;
+        }
+        div.data {
+            word-break: break-all;
+        }
+
+    </style>
+    <script src="data.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script>
+        var myApp = angular.module('yahooApp', ['ngRoute']);
+
+        myApp.directive('company', function(){
+            return {
+                restrict: 'E',
+                templateUrl: 'directive_template.html'
+            };
+        });
+
+        myApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider.when('/companies', {
+                templateUrl: 'view_companies.html',
+                controller: 'YahooCtrl'
+            }).when('/companies/:symbol', {
+                templateUrl: 'view_company_detail.html',
+                controller: 'StockCtrl'
+            }).otherwise({
+                redirectTo: '/companies'
+            });
+        }]);
+
+        // creating a service with a factory recipe
+        myApp.factory('CompanyList', function(){
+            return data;
+        });
+
+
+       /* myApp.value('url', 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.' +
+                'finance.quotes%20where%20symbol%20in%20(%27GOOG%27)&format=' +
+                'json&diagnostics=true&env=http://datatables.org/alltables.env');*/
+        myApp.controller('YahooCtrl', ['$scope', 'CompanyList', function (scope, list) {
+            scope.message = 'Getting yahoo data ... ';
+            scope.companies = list;
+        }]);
+
+        // controller gets data from the yql and serves it in the view
+        myApp.controller('StockCtrl', ['$scope', '$http', '$routeParams', function(scope, http, params){
+            var url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.' +
+                    'finance.quotes%20where%20symbol%20in%20(%27' + params.symbol +'%27)&format=' +
+                    'json&diagnostics=true&env=http://datatables.org/alltables.env';
+            console.log(params.symbol);
+            http.get(url).success(function(data){
+                scope.data = JSON.stringify(data);
+            });
+        }]);
+
+    </script>
+</head>
+<body>
+
+    <div ng-view>
+
+    </div>
+</body>
+</html>
